@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Roots of Pacha — Animal Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{--b0:#161210;--b1:#1e1a16;--b2:#282320;--bd:#3e3830;--bd2:#504838;--t:#e6dac6;--t2:#b0a490;--t3:#7a6e5e;--ac:#d4915c;--g:#7db86a;--r:#5e9fd4;--l:#daa520;--rd:#c85a5a;--ct:#e07850}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--b0);color:var(--t);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-family:'DM Sans',sans-serif}
+.app{max-width:780px;margin:0 auto;padding:10px 12px 90px}
+.hdr{text-align:center;padding:16px 0 10px}.hdr h1{font-family:'Caveat',cursive;font-size:2.2rem;font-weight:700;color:var(--ac);line-height:1}.hdr p{font-size:.65rem;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.topbar{display:flex;align-items:center;gap:6px;background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;margin-bottom:8px;flex-wrap:wrap}
+.tg{display:flex;align-items:center;gap:4px}.tg label{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px}
+.tsel,.tinp{background:var(--b1);border:1px solid var(--bd);color:var(--t);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:'DM Sans',sans-serif;outline:none}.tsel{width:90px}.tinp{width:48px;text-align:center}
+.cap{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--t2)}.cap b{color:var(--ac);font-size:.85rem}
+.capBar{width:60px;height:5px;background:var(--b1);border-radius:3px;overflow:hidden}.capFill{height:100%;border-radius:3px;transition:width .3s}
+.alertBox{border-radius:10px;padding:8px 12px;margin-bottom:5px;font-size:.73rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.alertSpawn{background:rgba(218,165,32,.12);border:1px solid rgba(218,165,32,.3);color:var(--l)}
+.alertCount{background:rgba(224,120,80,.10);border:1px solid rgba(224,120,80,.25);color:var(--ct)}
+.tabs{display:flex;gap:2px;background:var(--b2);border-radius:8px;padding:2px;margin-bottom:8px;border:1px solid var(--bd)}
+.tab{flex:1;padding:7px;text-align:center;font-size:.62rem;font-weight:600;color:var(--t3);background:transparent;border:none;border-radius:6px;text-transform:uppercase;letter-spacing:.6px}.tab.on{background:var(--ac);color:var(--b0)}.tab:hover:not(.on){color:var(--t)}
+.scard{background:var(--b2);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:5px}.scard:hover{border-color:var(--bd2)}.scard.done{border-color:var(--g)}
+.shdr{display:flex;align-items:center;padding:9px 12px;cursor:pointer;gap:8px;user-select:none}
+.semoji{font-size:1.4rem;line-height:1}.sinfo{flex:1;min-width:0}.sname{font-family:'Caveat',cursive;font-size:1.3rem;font-weight:700;line-height:1.1}.smeta{font-size:.6rem;color:var(--t3);display:flex;gap:6px;margin-top:1px;flex-wrap:wrap}
+.badges{display:flex;gap:3px;align-items:center}
+.bdg{font-size:.55rem;padding:1px 6px;border-radius:8px;font-weight:700;text-transform:uppercase}
+.bdg-r{background:rgba(94,159,212,.10);color:var(--r);border:1px solid rgba(94,159,212,.25)}.bdg-l{background:rgba(218,165,32,.10);color:var(--l);border:1px solid rgba(218,165,32,.25)}.bdg-x{background:rgba(255,255,255,.03);color:var(--t3);border:1px solid var(--bd)}.bdg-ok{background:rgba(125,184,106,.12);color:var(--g);border:1px solid rgba(125,184,106,.25)}
+.pbar{display:flex;align-items:center;gap:4px}.pbBg{width:36px;height:4px;background:var(--b1);border-radius:2px;overflow:hidden}.pbFill{height:100%;border-radius:2px;transition:width .3s}.pbPct{font-size:.65rem;color:var(--t3);font-weight:600;width:28px;text-align:right}
+.chev{color:var(--t3);font-size:.7rem;transition:transform .15s}.chev.open{transform:rotate(90deg)}
+.detail{border-top:1px solid var(--bd);padding:10px 12px;background:var(--b1);display:none}.detail.show{display:block}
+.dstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px;margin-bottom:10px}
+.dstat{background:var(--b2);border:1px solid var(--bd);border-radius:8px;padding:7px;text-align:center}.dv{font-family:'Caveat',cursive;font-size:1.4rem;font-weight:700;color:var(--ac);line-height:1}.dl{font-size:.55rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.secLbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin:8px 0 4px;display:flex;align-items:center;gap:6px}.secLbl .ln{flex:1;height:1px;background:var(--bd)}
+.crow{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--b2);border-radius:7px;border-left:1px solid transparent;margin-bottom:2px}.crow:hover{border-color:var(--bd)}.crow.has{border-left:3px solid var(--g)}.crow.rr{border-left:3px solid var(--r)}.crow.lr{border-left:3px solid var(--l)}.crow.lk{opacity:.4}
+.cn{flex:1;font-size:.78rem;font-weight:500;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.csw{width:10px;height:10px;border-radius:3px;border:1px solid rgba(255,255,255,.15);flex-shrink:0}
+.ctR{font-size:.5rem;padding:1px 4px;border-radius:4px;font-weight:700;background:rgba(94,159,212,.10);color:var(--r)}.ctL{font-size:.5rem;padding:1px 4px;border-radius:4px;font-weight:700;background:rgba(218,165,32,.10);color:var(--l)}
+.spI{font-size:.48rem;color:var(--t3);background:rgba(255,255,255,.04);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.attSec{display:flex;align-items:center;gap:2px;margin-right:4px}.attLbl{font-size:.5rem;color:var(--t3);margin-right:2px}
+.attDot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--bd2);background:transparent;cursor:pointer;padding:0}.attDot.on{background:var(--ac);border-color:var(--ac)}.attDot:hover{border-color:var(--ac)}
+.qc{display:flex;align-items:center;background:var(--b1);border-radius:7px;border:1px solid var(--bd);overflow:hidden}
+.qb{width:26px;height:26px;border:none;background:transparent;color:var(--t2);font-size:.95rem;display:flex;align-items:center;justify-content:center;font-weight:700}.qb:hover{background:var(--ac);color:var(--b0)}.qb:active{transform:scale(.9)}.qb.off{opacity:.2;pointer-events:none}
+.qv{width:28px;text-align:center;font-size:.8rem;font-weight:700;border-left:1px solid var(--bd);border-right:1px solid var(--bd);padding:3px 0}
+.ttRow{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:6px 8px;background:var(--b2);border-radius:8px;border:1px solid var(--bd)}.ttLbl{font-size:.7rem;font-weight:600;color:var(--t2);flex:1}
+.ecard{background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.ename{font-family:'Caveat',cursive;font-size:1.15rem;font-weight:700}.efrom{font-size:.6rem;color:var(--t3)}
+.etog{padding:4px 10px;border-radius:7px;border:1px solid var(--bd);background:var(--b1);color:var(--t3);font-size:.65rem;font-weight:600;margin-right:6px}.etog.on{background:rgba(125,184,106,.12);color:var(--g);border-color:rgba(125,184,106,.25)}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;margin-bottom:12px}
+.s2{background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center}.s2v{font-family:'Caveat',cursive;font-size:1.8rem;font-weight:700;color:var(--ac);line-height:1}.s2l{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.obar{background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px}.obarTop{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t2);margin-bottom:5px}.obarBg{height:8px;background:var(--b1);border-radius:4px;overflow:hidden}.obarFill{height:100%;background:linear-gradient(90deg,var(--ac),var(--g));border-radius:4px;transition:width .4s}
+.resetBtn,.syncBtn{padding:6px 16px;border-radius:7px;font-size:.7rem;font-weight:600;border:1px solid var(--bd);background:var(--b1);color:var(--t2);margin:4px}
+.resetBtn{border-color:var(--rd);color:var(--rd)}.resetBtn:hover{background:var(--rd);color:#fff}
+.syncBtn:hover{background:var(--ac);color:var(--b0);border-color:var(--ac)}
+.resetArea{text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--bd)}
+.sumRow{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;background:var(--b2);border-radius:7px;margin-bottom:2px;font-size:.78rem}
+.sumRight{font-size:.7rem;display:flex;gap:6px;align-items:center}
+.evoInfo{font-size:.72rem;color:var(--t2);padding:6px 2px 10px;line-height:1.5}
+.pieWrap{display:flex;justify-content:center;align-items:center;flex-direction:column;margin:12px 0}
+.pieLegend{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:center;margin-top:8px;max-width:400px}
+.pieLI{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--t2);cursor:pointer;padding:2px 4px;border-radius:4px;transition:background .15s}
+.pieLI:hover{background:var(--b2)}
+.pieLI .dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modalInner{background:var(--b1);border:1px solid var(--bd);border-radius:14px;padding:20px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto}
+.modalTitle{font-family:'Caveat',cursive;font-size:1.5rem;font-weight:700;color:var(--ac);text-align:center;margin-bottom:10px}
+.modalClose{float:right;background:none;border:none;color:var(--t3);font-size:1.2rem;cursor:pointer;padding:4px 8px}
+.syncArea{background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-top:10px}
+.syncArea textarea{width:100%;height:80px;background:var(--b1);border:1px solid var(--bd);color:var(--t);border-radius:6px;padding:8px;font-size:.7rem;font-family:monospace;resize:vertical;margin:6px 0}
+.syncArea label{font-size:.65rem;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+@media(max-width:500px){.app{padding:6px 8px 80px}.hdr h1{font-size:1.7rem}.topbar{padding:6px 8px}.dstats{grid-template-columns:repeat(2,1fr)}.tab{font-size:.55rem;padding:6px 2px;letter-spacing:0}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div id="modal"></div>
+<script>
+const SK="rop-v8",SEASONS=["Spring","Summer","Fall","Winter"],MAX_SHEDS=12,SPS=10;
+const COLORS_MAP={"Ash":"#8a8070","Brown":"#7a5230","Cherry":"#a0303a","Chocolate":"#4a2a1a","Coral":"#e08060","Dark":"#302520","Storm":"#607080","Golden":"#d4a520","Snow":"#e8e0d8","Flame":"#e04020","Sambayon":"#e0c880","Dulce de Leche":"#c8a060","Bark":"#5a3a20","Brown Fluffy":"#8a6040","Pale":"#d0c0a8","Dust Cloud":"#b0a090","Chicle":"#e090a0","Sky Cloud":"#80b8d8","Orange":"#d87030","Rocky":"#908070","Dirt":"#6a5840","Mustard":"#c8a030","Night":"#282830","Day":"#e8d8b0","Fiery":"#d85020","Icy":"#a0d0e8","Light Dust":"#c8b8a0","Ochre":"#c09040","Spotted":"#b0a080","Mud":"#6a5030","Dun":"#b8a070","Cloudy Day":"#c0c8d0","Starry Night":"#1a2040","Light Brown":"#a88060","Dark Brown":"#5a3820","Tramontana":"#708090","Cocoa":"#4a2818","Cookies and Cream":"#e0d0b0","Almond Chocolate":"#785030","Shallow Waters":"#70b0c0","Spider":"#303840","Light Chocolate":"#a07050","Dust":"#b8a888","Dark Chocolate":"#3a2010","Strawberry":"#d06070","White Turquoise":"#c0e0d8","Black Turquoise":"#204848","Amethyst":"#8060a0","Grand Turquoise":"#30a0a0","Deep Ocean":"#1a3050","Grassy Green":"#508040","Orange Earth":"#c07030","Snowy":"#e0d8d0","Ebony":"#1a1818","Sapphire":"#3060c0","Rainbow":"#d06080","Camouflage":"#607040","Raspberry":"#a03050","Gray":"#888080","White":"#e8e0e0","Black":"#1a1a1a","Fiber":"#c0a870","Fire":"#d84010","Classical":"#c8a870","Dada":"#d06050","Cubist":"#5080b0","Deco":"#c0a050","Rococo":"#d0a0b0","Nouveau":"#60a070","Fauves":"#e07030","Modern":"#4070a0","Surreal":"#8050a0","Pop":"#e05080","Harp":"#c8a860","Lute":"#a07040","Erhu":"#8a4030","Banjo":"#c09050","Lyre":"#d0b870","Sitar":"#905838","Oud":"#6a4828","Zither":"#70a0a0","Ukulele":"#c07838","Bass":"#383050"};
+const AD=[
+{s:"Aurochs",e:"🐂",ad:4,ev:"Cow",c:[{n:"Ash",t:"n"},{n:"Brown",t:"n"},{n:"Cherry",t:"n"},{n:"Chocolate",t:"n"},{n:"Coral",t:"n"},{n:"Dark",t:"n"},{n:"Storm",t:"n"},{n:"Golden",t:"r",sp:{d:[7,21],ss:[0,2]}},{n:"Snow",t:"r",sp:{d:[14,28],ss:[1,3]}},{n:"Flame",t:"l",sp:{d:[10],ss:[1,3]}}]},
+{s:"Bison",e:"🦬",ad:3,ev:null,c:[{n:"Brown",t:"n"},{n:"Sambayon",t:"n"},{n:"Dulce de Leche",t:"n"},{n:"Bark",t:"n"},{n:"Brown Fluffy",t:"n"},{n:"Pale",t:"n"},{n:"Dust Cloud",t:"n"},{n:"Golden",t:"r",sp:{d:[3,17],ss:[1,3]}},{n:"Chicle",t:"r",sp:{d:[10,24],ss:[0,2]}},{n:"Sky Cloud",t:"l",sp:{d:[22],ss:[1,3]}}]},
+{s:"Guanaco",e:"🦙",ad:3,ev:"Llama",c:[{n:"Orange",t:"n"},{n:"Rocky",t:"n"},{n:"Dirt",t:"n"},{n:"Ash",t:"n"},{n:"Mustard",t:"n"},{n:"Night",t:"n"},{n:"Day",t:"n"},{n:"Golden",t:"r",sp:{d:[5,19],ss:[0,2]}},{n:"Fiery",t:"r",sp:{d:[12,26],ss:[1,3]}},{n:"Icy",t:"l",sp:{d:[2],ss:[0,2]}}]},
+{s:"Horse",e:"🐴",ad:3,ev:null,c:[{n:"Light Dust",t:"n"},{n:"Ochre",t:"n"},{n:"Spotted",t:"n"},{n:"Mud",t:"n"},{n:"Dun",t:"n"},{n:"Night",t:"n"},{n:"Day",t:"n"},{n:"Golden",t:"r",sp:{d:[7,21],ss:[1,3]}},{n:"Cloudy Day",t:"r",sp:{d:[14,28],ss:[0,2]}},{n:"Starry Night",t:"l",sp:{d:[18],ss:[0,2]}}]},
+{s:"Ibex",e:"🐐",ad:2,ev:"Goat",c:[{n:"Light Brown",t:"n"},{n:"Dark Brown",t:"n"},{n:"Tramontana",t:"n"},{n:"Mustard",t:"n"},{n:"Cocoa",t:"n"},{n:"Cookies and Cream",t:"n"},{n:"Almond Chocolate",t:"n"},{n:"Golden",t:"r",sp:{d:[2,16],ss:[1,3]}},{n:"Shallow Waters",t:"r",sp:{d:[9,23],ss:[0,2]}},{n:"Spider",t:"l",sp:{d:[26],ss:[0,2]}}]},
+{s:"Junglefowl",e:"🐓",ad:2,ev:"Chicken",c:[{n:"Light Chocolate",t:"n"},{n:"Dust",t:"n"},{n:"Dark Chocolate",t:"n"},{n:"Mustard",t:"n"},{n:"Strawberry",t:"n"},{n:"White Turquoise",t:"n"},{n:"Black Turquoise",t:"n"},{n:"Golden",t:"r",sp:{d:[6,20],ss:[0,2]}},{n:"Amethyst",t:"r",sp:{d:[13,27],ss:[1,3]}},{n:"Grand Turquoise",t:"l",sp:{d:[10],ss:[0,2]}}]},
+{s:"Ostrich",e:"🪶",ad:3,ev:null,c:[{n:"Deep Ocean",t:"n"},{n:"Light Dust",t:"n"},{n:"Grassy Green",t:"n"},{n:"Orange Earth",t:"n"},{n:"Mustard",t:"n"},{n:"Snowy",t:"n"},{n:"Ebony",t:"n"},{n:"Golden",t:"r",sp:{d:[4,18],ss:[0,2]}},{n:"Sapphire",t:"r",sp:{d:[11,25],ss:[1,3]}},{n:"Rainbow",t:"l",sp:{d:[14],ss:[1,3]}}]},
+{s:"Wild Boar",e:"🐗",ad:2,ev:"Pig",c:[{n:"Brown",t:"n"},{n:"Chocolate",t:"n"},{n:"Camouflage",t:"n"},{n:"Raspberry",t:"n"},{n:"Gray",t:"n"},{n:"White",t:"n"},{n:"Black",t:"n"},{n:"Golden",t:"r",sp:{d:[1,15],ss:[0,2]}},{n:"Fiber",t:"r",sp:{d:[8,22],ss:[1,3]}},{n:"Fire",t:"l",sp:{d:[6],ss:[1,3]}}]},
+{s:"Dodo",e:"🦤",ad:2,ev:null,c:[{n:"Classical",t:"n"},{n:"Dada",t:"n"},{n:"Cubist",t:"n"},{n:"Deco",t:"n"},{n:"Rococo",t:"n"},{n:"Nouveau",t:"n"},{n:"Fauves",t:"n"},{n:"Modern",t:"r",sp:{d:[6,20],ss:[0,2]}},{n:"Surreal",t:"r",sp:{d:[13,27],ss:[1,3]}},{n:"Pop",t:"l",sp:{d:[10],ss:[0,2]}}]},
+{s:"Mouflon",e:"🐏",ad:3,ev:"Sheep",c:[{n:"Harp",t:"n"},{n:"Lute",t:"n"},{n:"Erhu",t:"n"},{n:"Banjo",t:"n"},{n:"Lyre",t:"n"},{n:"Sitar",t:"n"},{n:"Oud",t:"n"},{n:"Zither",t:"r",sp:{d:[2,16],ss:[0,2]}},{n:"Ukulele",t:"r",sp:{d:[9,23],ss:[1,3]}},{n:"Bass",t:"l",sp:{d:[26],ss:[0,2]}}]}
+];
+const EVA=[{s:"Cow",f:"Aurochs",e:"🐄"},{s:"Pig",f:"Wild Boar",e:"🐷"},{s:"Chicken",f:"Junglefowl",e:"🐔"},{s:"Goat",f:"Ibex",e:"🐐"},{s:"Sheep",f:"Mouflon",e:"🐑"},{s:"Llama",f:"Guanaco",e:"🦙"}];
+const PIE_COLS=["#d4915c","#7db86a","#5e9fd4","#daa520","#c85a5a","#a07bc0","#e07850","#60b0a0","#d08090","#8aa060"];
+const INIT={
+  Aurochs:{tt:12,c:{Ash:1,Brown:2,Cherry:2,Chocolate:2,Coral:1,Dark:2,Storm:1,Golden:1,Snow:1,Flame:1}},
+  Bison:{tt:14,c:{Brown:3,Sambayon:1,"Dulce de Leche":1,Bark:2,"Brown Fluffy":1,Pale:1,"Dust Cloud":1,Golden:2,Chicle:1,"Sky Cloud":1}},
+  Guanaco:{tt:12,c:{Orange:2,Rocky:2,Dirt:1,Ash:3,Mustard:1,Night:1,Day:1,Golden:2,Fiery:2,Icy:0}},
+  Horse:{tt:13,c:{"Light Dust":1,Ochre:1,Spotted:2,Mud:2,Dun:1,Night:1,Day:1,Golden:1,"Cloudy Day":1,"Starry Night":1}},
+  Ibex:{tt:17,c:{"Light Brown":1,"Dark Brown":1,Tramontana:1,Mustard:1,Cocoa:2,"Cookies and Cream":1,"Almond Chocolate":1,Golden:1,"Shallow Waters":1,Spider:3}},
+  Junglefowl:{tt:12,c:{"Light Chocolate":1,Dust:2,"Dark Chocolate":1,Mustard:2,Strawberry:2,"White Turquoise":0,"Black Turquoise":1,Golden:1,Amethyst:1,"Grand Turquoise":0}},
+  Ostrich:{tt:12,c:{"Deep Ocean":1,"Light Dust":2,"Grassy Green":1,"Orange Earth":1,Mustard:1,Snowy:1,Ebony:2,Golden:1,Sapphire:2,Rainbow:1}},
+  "Wild Boar":{tt:14,c:{Brown:1,Chocolate:2,Camouflage:1,Raspberry:1,Gray:1,White:4,Black:1,Golden:1,Fiber:1,Fire:1}},
+  Dodo:{tt:5,c:{Classical:0,Dada:1,Cubist:2,Deco:0,Rococo:1,Nouveau:1,Fauves:0,Modern:0,Surreal:0,Pop:0}},
+  Mouflon:{tt:6,c:{Harp:1,Lute:2,Erhu:1,Banjo:0,Lyre:1,Sitar:0,Oud:1,Zither:0,Ukulele:0,Bass:0}}
+};
+
+function mkDef(){const an={};AD.forEach(a=>{const i=INIT[a.s],c={},at={};a.c.forEach(cl=>{c[cl.n]=i?.c[cl.n]??0;at[cl.n]=0});an[a.s]={tt:i?.tt??0,c,at}});const ev={};EVA.forEach(e=>{ev[e.s]={u:false,n:0}});return{season:0,day:1,an,ev,sheds:12,tab:"tracker",exp:null}}
+let S;try{const raw=localStorage.getItem(SK);S=raw?JSON.parse(raw):mkDef();AD.forEach(a=>{if(!S.an[a.s])S.an[a.s]=mkDef().an[a.s];if(!S.an[a.s].at)S.an[a.s].at={};a.c.forEach(cl=>{if(S.an[a.s].c[cl.n]===undefined)S.an[a.s].c[cl.n]=0;if(S.an[a.s].at[cl.n]===undefined)S.an[a.s].at[cl.n]=0;if(S.an[a.s].tt===undefined)S.an[a.s].tt=0})});if(!S.ev)S.ev=mkDef().ev;EVA.forEach(e=>{if(!S.ev[e.s])S.ev[e.s]={u:false,n:0}});if(!S.sheds)S.sheds=12}catch(e){S=mkDef()}
+function save(){localStorage.setItem(SK,JSON.stringify(S))}
+function daysUntil(sd,ss,cs,cd){if(!ss.includes(cs))return-1;let b=999;for(const d of sd){const df=d-cd;if(df>=0&&df<b)b=df}return b>28?-1:b}
+function spawnLabel(sp){return sp.ss.map(i=>SEASONS[i]).join("/")+"\u00a0D"+sp.d.join(",")}
+
+// SVG Pie chart generator
+function makePie(data,size,hole){
+  if(!data.length||data.every(d=>d.v===0))return`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2-2}" fill="none" stroke="#3e3830" stroke-width="2"/><text x="${size/2}" y="${size/2+4}" text-anchor="middle" fill="#7a6e5e" font-size="11" font-family="DM Sans">No data</text></svg>`;
+  const total=data.reduce((s,d)=>s+d.v,0);const cx=size/2,cy=size/2,r=size/2-2,ir=hole||0;
+  let ang=-Math.PI/2,paths="";
+  data.forEach((d,i)=>{if(d.v===0)return;const slice=d.v/total*Math.PI*2;const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);const x2=cx+r*Math.cos(ang+slice),y2=cy+r*Math.sin(ang+slice);
+    const ix1=cx+ir*Math.cos(ang),iy1=cy+ir*Math.sin(ang);const ix2=cx+ir*Math.cos(ang+slice),iy2=cy+ir*Math.sin(ang+slice);
+    const lg=slice>Math.PI?1:0;
+    if(ir>0){paths+=`<path d="M${ix1},${iy1} L${x1},${y1} A${r},${r} 0 ${lg} 1 ${x2},${y2} L${ix2},${iy2} A${ir},${ir} 0 ${lg} 0 ${ix1},${iy1}" fill="${d.c}" stroke="${"#161210"}" stroke-width="1.5"/>`}
+    else{paths+=`<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${lg} 1 ${x2},${y2} Z" fill="${d.c}" stroke="${"#161210"}" stroke-width="1.5"/>`}
+    ang+=slice;
+  });
+  return`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths}</svg>`;
+}
+
+function showSpeciesPie(idx){
+  const a=AD[idx],sa=S.an[a.s];
+  const data=a.c.filter(c=>sa.c[c.n]>0).map(c=>({v:sa.c[c.n],c:COLORS_MAP[c.n]||"#888",n:c.n,q:sa.c[c.n]}));
+  let h=`<div class="modalInner"><button class="modalClose" onclick="document.getElementById('modal').innerHTML=''">✕</button>`;
+  h+=`<div class="modalTitle">${a.e} ${a.s}</div>`;
+  h+=`<div class="pieWrap">${makePie(data,180,45)}`;
+  h+=`<div class="pieLegend">${data.map(d=>`<span class="pieLI"><span class="dot" style="background:${d.c}"></span>${d.n}: ${d.q}</span>`).join("")}</div></div>`;
+  const missing=a.c.filter(c=>sa.c[c.n]===0);
+  if(missing.length){h+=`<div class="secLbl" style="margin-top:12px">Missing <span class="ln"></span></div>`;
+    h+=missing.map(c=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:.75rem;color:var(--t3)"><span class="csw" style="background:${COLORS_MAP[c.n]||"#888"}"></span>${c.n}${c.t==="r"?' <span class="ctR">R</span>':""}${c.t==="l"?' <span class="ctL">L</span>':""}</div>`).join("")}
+  h+=`</div>`;
+  document.getElementById("modal").innerHTML=`<div class="modal" onclick="if(event.target===this)this.innerHTML=''">${h}</div>`;
+}
+
+function render(){
+  let totF=0,totC=0,totP=0,spD=0;const farmBySpecies=[];
+  AD.forEach((a,i)=>{const sa=S.an[a.s];const fc=Object.values(sa.c).reduce((x,v)=>x+v,0);totF+=fc;farmBySpecies.push({n:a.s,v:fc,c:PIE_COLS[i],e:a.e,i});const cc=a.c.filter(c=>sa.c[c.n]>0).length;totC+=cc;totP+=a.c.length;if(cc===a.c.length)spD++});
+  totF+=EVA.reduce((x,e)=>x+(S.ev[e.s]?.n||0),0);
+  const mx=S.sheds*SPS,capP=Math.min(100,Math.round(totF/mx*100)),oP=totP?Math.round(totC/totP*100):0;
+  const spawns=[],countdowns=[];
+  AD.forEach(a=>{const sa=S.an[a.s],rOk=sa.tt>=8,lOk=sa.tt>=12;
+    a.c.forEach(c=>{if(!c.sp)return;if((c.t==="r"&&!rOk)||(c.t==="l"&&!lOk))return;if(sa.c[c.n]>0)return;
+      const du=daysUntil(c.sp.d,c.sp.ss,S.season,S.day);
+      if(du===0)spawns.push({sp:a.s,em:a.e,cn:c.n,t:c.t});
+      else if(du>0&&du<=3)countdowns.push({sp:a.s,em:a.e,cn:c.n,t:c.t,d:du});
+    });
+  });
+
+  let h=`<div class="hdr"><h1>🌿 Roots of Pacha</h1><p>Animal Tracker</p></div>`;
+  h+=`<div class="topbar"><div class="tg"><label>Season</label><select class="tsel" onchange="S.season=+this.value;save();render()">${SEASONS.map((n,i)=>`<option value="${i}"${S.season===i?" selected":""}>${n}</option>`).join("")}</select></div>`;
+  h+=`<div class="tg"><label>Day</label><input class="tinp" type="number" min="1" max="28" value="${S.day}" onchange="S.day=Math.min(28,Math.max(1,+this.value||1));save();render()"></div>`;
+  h+=`<div class="tg"><label>Sheds</label><div class="qc"><button class="qb${S.sheds<=1?" off":""}" onclick="if(S.sheds>1){S.sheds--;save();render()}">−</button><div class="qv">${S.sheds}</div><button class="qb${S.sheds>=MAX_SHEDS?" off":""}" onclick="if(S.sheds<${MAX_SHEDS}){S.sheds++;save();render()}">+</button></div></div>`;
+  h+=`<div class="cap"><b>${totF}</b>/${mx}<div class="capBar"><div class="capFill" style="width:${capP}%;background:${capP>90?"var(--rd)":capP>70?"var(--l)":"var(--g)"}"></div></div></div></div>`;
+  spawns.forEach(a=>{h+=`<div class="alertBox alertSpawn">🌟 <strong>${a.em} ${a.sp} — ${a.cn}</strong> available today! (${a.t==="l"?"Legendary":"Rare"})</div>`});
+  countdowns.forEach(a=>{h+=`<div class="alertBox alertCount">⏳ <strong>${a.em} ${a.sp} — ${a.cn}</strong> in <strong>${a.d} day${a.d>1?"s":""}</strong> (${a.t==="l"?"Legendary":"Rare"})</div>`});
+  h+=`<div class="tabs">${[["tracker","Animals"],["evolved","Evolved"],["charts","Charts"],["summary","Summary"]].map(([k,l])=>`<button class="tab${S.tab===k?" on":""}" onclick="S.tab='${k}';save();render()">${l}</button>`).join("")}</div>`;
+
+  if(S.tab==="tracker"){
+    AD.forEach(a=>{
+      const sa=S.an[a.s],fc=Object.values(sa.c).reduce((x,v)=>x+v,0),cc=a.c.filter(c=>sa.c[c.n]>0).length,tt=a.c.length,pc=Math.round(cc/tt*100),rOk=sa.tt>=8,lOk=sa.tt>=12,dn=cc===tt,ex=S.exp===a.s;
+      h+=`<div class="scard${dn?" done":""}"><div class="shdr" onclick="S.exp=S.exp==='${a.s}'?null:'${a.s}';save();render()">`;
+      h+=`<span class="semoji">${a.e}</span><div class="sinfo"><div class="sname">${a.s}</div><div class="smeta"><span>${fc} on farm</span><span>·</span><span>${sa.tt} tamed</span>${a.ev?`<span>·</span><span>→ ${a.ev}`:""}</span></div></div>`;
+      h+=`<div class="badges">${dn?'<span class="bdg bdg-ok">✓</span>':""}${rOk?'<span class="bdg bdg-r">R</span>':'<span class="bdg bdg-x">R🔒</span>'}${lOk?'<span class="bdg bdg-l">L</span>':'<span class="bdg bdg-x">L🔒</span>'}</div>`;
+      h+=`<div class="pbar"><div class="pbBg"><div class="pbFill" style="width:${pc}%;background:${dn?"var(--g)":"var(--ac)"}"></div></div><span class="pbPct">${pc}%</span></div>`;
+      h+=`<span class="chev${ex?" open":""}">▶</span></div>`;
+      if(ex){
+        h+=`<div class="detail show">`;const esc=a.s.replace(/'/g,"\\'");
+        h+=`<div class="ttRow"><span class="ttLbl">Total Tamed (for R/L unlock)</span><div class="qc"><button class="qb${sa.tt<=0?" off":""}" onclick="if(S.an['${esc}'].tt>0){S.an['${esc}'].tt--;save();render()}">−</button><div class="qv" style="width:34px">${sa.tt}</div><button class="qb" onclick="S.an['${esc}'].tt++;save();render()">+</button></div></div>`;
+        h+=`<div class="dstats"><div class="dstat"><div class="dv">${fc}</div><div class="dl">On Farm</div></div><div class="dstat"><div class="dv">${cc}/${tt}</div><div class="dl">Colors</div></div><div class="dstat"><div class="dv" style="color:${rOk?"var(--r)":"var(--t3)"}">${rOk?"✓":sa.tt+"/8"}</div><div class="dl">Rare</div></div><div class="dstat"><div class="dv" style="color:${lOk?"var(--l)":"var(--t3)"}">${lOk?"✓":sa.tt+"/12"}</div><div class="dl">Leg.</div></div></div>`;
+        [["n","Common / Uncommon",false],["r","Rare",!rOk],["l","Legendary",!lOk]].forEach(([type,label,locked])=>{
+          const cols=a.c.filter(c=>c.t===type);if(!cols.length)return;
+          h+=`<div class="secLbl">${label}${locked?` <span style="color:var(--t3);font-weight:400;font-size:.55rem">(${type==="r"?"8":"12"}+ tamed)</span>`:""}<span class="ln"></span></div>`;
+          cols.forEach(c=>{
+            const q=sa.c[c.n]||0,at=sa.at[c.n]||0,cesc=c.n.replace(/'/g,"\\'"),clr=COLORS_MAP[c.n]||"#888";
+            const cls=type==="r"?(q>0?"crow rr":"crow"):type==="l"?(q>0?"crow lr":"crow"):q>0?"crow has":"crow";
+            h+=`<div class="${cls}${locked?" lk":""}"><span class="csw" style="background:${clr}"></span><span class="cn">${c.n}${type==="r"?'<span class="ctR">R</span>':""}${type==="l"?'<span class="ctL">L</span>':""}${c.sp?`<span class="spI">${spawnLabel(c.sp)}</span>`:""}</span>`;
+            if(q===0&&!locked){
+              h+=`<div class="attSec"><span class="attLbl">♪</span>`;
+              for(let i=0;i<a.ad;i++){h+=`<button class="attDot${i<at?" on":""}" onclick="(function(){var a=S.an['${esc}'].at['${cesc}']||0,nA=${i}<a?${i}:${i+1};if(nA>=${a.ad}){S.an['${esc}'].at['${cesc}']=0;S.an['${esc}'].c['${cesc}']++;S.an['${esc}'].tt++}else{S.an['${esc}'].at['${cesc}']=nA}save();render()})()"></button>`}
+              h+=`</div>`;
+            }
+            h+=`<div class="qc"><button class="qb${q<=0?" off":""}" onclick="if(S.an['${esc}'].c['${cesc}']>0){S.an['${esc}'].c['${cesc}']--;save();render()}">−</button><div class="qv">${q}</div><button class="qb" onclick="S.an['${esc}'].c['${cesc}']++;save();render()">+</button></div></div>`;
+          });
+        });
+        h+=`</div>`;
+      }
+      h+=`</div>`;
+    });
+  }
+
+  if(S.tab==="evolved"){
+    h+=`<div class="evoInfo">Evolved animals are unlocked via the Sun Caves ice statues (offer 5 Best Quality produce). Breed via "Breed with traits" — color inherits from parent species.</div>`;
+    EVA.forEach(ev=>{const u=S.ev[ev.s]?.u,n=S.ev[ev.s]?.n||0;
+      h+=`<div class="ecard"><span style="font-size:1.4rem">${ev.e}</span><div style="flex:1"><div class="ename">${ev.s}</div><div class="efrom">From ${ev.f}</div></div>`;
+      h+=`<button class="etog${u?" on":""}" onclick="S.ev['${ev.s}'].u=!S.ev['${ev.s}'].u;save();render()">${u?"✓ Unlocked":"🔒 Locked"}</button>`;
+      h+=`<div class="qc"><button class="qb${n<=0?" off":""}" onclick="if(S.ev['${ev.s}'].n>0){S.ev['${ev.s}'].n--;save();render()}">−</button><div class="qv">${n}</div><button class="qb" onclick="S.ev['${ev.s}'].n++;save();render()">+</button></div></div>`;
+    });
+  }
+
+  if(S.tab==="charts"){
+    h+=`<div style="text-align:center;margin-bottom:6px"><div class="secLbl">Animals on Farm <span class="ln"></span></div></div>`;
+    h+=`<div class="pieWrap">${makePie(farmBySpecies.filter(d=>d.v>0),200,50)}`;
+    h+=`<div class="pieLegend">${farmBySpecies.map(d=>`<span class="pieLI" onclick="showSpeciesPie(${d.i})"><span class="dot" style="background:${d.c}"></span>${d.e} ${d.n}: ${d.v}</span>`).join("")}</div></div>`;
+    h+=`<div style="font-size:.6rem;color:var(--t3);text-align:center;margin-top:4px">Click a species to see its color breakdown</div>`;
+    h+=`<div class="secLbl" style="margin-top:16px">Per-Species Color Charts <span class="ln"></span></div>`;
+    h+=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">`;
+    AD.forEach((a,i)=>{
+      const sa=S.an[a.s];const data=a.c.filter(c=>sa.c[c.n]>0).map(c=>({v:sa.c[c.n],c:COLORS_MAP[c.n]||"#888",n:c.n}));
+      h+=`<div style="background:var(--b2);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center;cursor:pointer" onclick="showSpeciesPie(${i})">`;
+      h+=`<div style="font-size:.7rem;font-weight:600;margin-bottom:6px">${a.e} ${a.s}</div>`;
+      h+=makePie(data,100,25);
+      h+=`</div>`;
+    });
+    h+=`</div>`;
+  }
+
+  if(S.tab==="summary"){
+    h+=`<div class="obar"><div class="obarTop"><span>Color Collection</span><span>${totC}/${totP} (${oP}%)</span></div><div class="obarBg"><div class="obarFill" style="width:${oP}%"></div></div></div>`;
+    h+=`<div class="sgrid"><div class="s2"><div class="s2v">${totF}</div><div class="s2l">On Farm</div></div><div class="s2"><div class="s2v">${totF}/${mx}</div><div class="s2l">Capacity</div></div><div class="s2"><div class="s2v">${spD}/${AD.length}</div><div class="s2l">Complete</div></div><div class="s2"><div class="s2v">${EVA.filter(e=>S.ev[e.s]?.u).length}/${EVA.length}</div><div class="s2l">Evolved</div></div></div>`;
+    h+=`<div class="secLbl">Per Species <span class="ln"></span></div>`;
+    AD.forEach(a=>{const sa=S.an[a.s],fc=Object.values(sa.c).reduce((x,v)=>x+v,0),cc=a.c.filter(c=>sa.c[c.n]>0).length,tt=a.c.length,p=Math.round(cc/tt*100);
+      h+=`<div class="sumRow"><span>${a.e} ${a.s}</span><span class="sumRight"><span style="color:var(--t3)">${fc} farm</span><span>${cc}/${tt}</span><span class="pbBg" style="width:45px"><span class="pbFill" style="width:${p}%;background:${p===100?"var(--g)":"var(--ac)"}"></span></span><span style="font-weight:700;width:28px;text-align:right">${p}%</span></span></div>`});
+
+    // Export/Import
+    h+=`<div class="syncArea" style="margin-top:16px"><label>📱 Sync Between Devices</label>`;
+    h+=`<div style="display:flex;gap:6px;margin-top:8px"><button class="syncBtn" onclick="document.getElementById('syncBox').value=btoa(JSON.stringify(S));document.getElementById('syncBox').select();document.execCommand('copy');this.textContent='Copied!'">Export</button>`;
+    h+=`<button class="syncBtn" onclick="try{var d=JSON.parse(atob(document.getElementById('syncBox').value.trim()));Object.assign(S,d);save();render();alert('Imported!')}catch(e){alert('Invalid data')}">Import</button></div>`;
+    h+=`<textarea id="syncBox" placeholder="Export copies your data here. To import on another device, paste the code and click Import."></textarea></div>`;
+
+    h+=`<div class="resetArea"><button class="resetBtn" onclick="if(confirm('Reset all data to original spreadsheet values?')){S=mkDef();save();render()}">Reset to Original Data</button></div>`;
+  }
+  document.getElementById("app").innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>
